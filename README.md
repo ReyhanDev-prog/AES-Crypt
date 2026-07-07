@@ -1,73 +1,56 @@
 # AES-128 Simulator
 
-Simulator AES-128 (encrypt/decrypt) berbasis single-file HTML/CSS/JS, lengkap dengan visualisasi state matrix per round dan Key Expansion.
+Aplikasi simulator AES-128 (Advanced Encryption Standard) untuk enkripsi dan dekripsi data, lengkap dengan visualisasi tahap demi tahap: state matrix per round, proses Key Expansion, dan seluruh operasi internal AES (SubBytes, ShiftRows, MixColumns, AddRoundKey).
 
-## Struktur Project
+## Cara Pemakaian
 
-```
-aes-deploy/
-├── public/
-│   └── index.html      # aplikasi utama (semua HTML/CSS/JS dalam 1 file)
-├── vercel.json          # konfigurasi deploy Vercel
-├── package.json
-└── .gitignore
-```
+### 1. Isi Plaintext / Ciphertext
 
-## Cara Deploy ke Vercel
+- Pilih tipe input di bagian **Plaintext**: **Teks** (ASCII biasa, maks. 16 karakter) atau **Hex** (32 karakter heksadesimal, merepresentasikan 16 byte).
+- Ketik input kamu pada kolom yang tersedia.
+  - Mode **Teks**: masukkan kalimat/kata bebas, maksimal 16 karakter (akan otomatis dipadding jika kurang dari 16 byte).
+  - Mode **Hex**: masukkan 32 digit hex, misalnya `3243f6a8885a308d313198a2e0370734`.
 
-### Opsi 1 — Vercel CLI (paling cepat)
+### 2. Isi Kunci (Key)
 
-1. Install Vercel CLI (jika belum ada):
-   ```bash
-   npm install -g vercel
-   ```
-2. Masuk ke folder project:
-   ```bash
-   cd aes-deploy
-   ```
-3. Login (sekali saja):
-   ```bash
-   vercel login
-   ```
-4. Deploy:
-   ```bash
-   vercel
-   ```
-   Ikuti prompt (pilih scope, nama project, dll — default saja sudah cukup).
-5. Untuk deploy ke production:
-   ```bash
-   vercel --prod
-   ```
+- Masukkan **Kunci AES-128** sepanjang 32 karakter hex (setara 128-bit / 16 byte) pada kolom **Kunci**.
+- Contoh: `2b7e151628aed2a6abf7158809cf4f3c`
+- Kolom akan berubah merah dan menampilkan pesan error jika format key tidak valid (bukan hex atau panjangnya tidak 32 karakter).
 
-### Opsi 2 — Lewat GitHub + Dashboard Vercel
+### 3. Pilih Mode Operasi
 
-1. Push folder ini ke repository GitHub baru:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: AES-128 Simulator"
-   git branch -M main
-   git remote add origin <URL_REPO_GITHUB_KAMU>
-   git push -u origin main
-   ```
-2. Buka https://vercel.com/new
-3. Import repository GitHub tersebut.
-4. Vercel akan otomatis mendeteksi ini sebagai static project (karena ada `vercel.json`). Tidak perlu setting Build Command atau Output Directory secara manual — biarkan default.
-5. Klik **Deploy**.
+- Klik tombol **🔒 ENKRIPSI** untuk mengenkripsi plaintext menjadi ciphertext.
+- Klik tombol **🔓 DEKRIPSI** untuk mendekripsi ciphertext kembali menjadi plaintext.
 
-### Opsi 3 — Drag & Drop (paling simpel, tanpa CLI/Git)
+### 4. Jalankan Proses
 
-1. Buka https://vercel.com/new
-2. Pilih tab "Deploy" lalu drag folder `aes-deploy` (atau langsung folder `public` berisi `index.html`) ke area upload.
-3. Vercel akan langsung deploy sebagai static site.
+- Klik tombol **Run/Proses** (tombol utama berwarna cyan) untuk menjalankan algoritma AES sesuai input dan mode yang dipilih.
+- Hasil output (ciphertext/plaintext dalam hex) akan langsung muncul di panel output, beserta input hex yang digunakan.
+- Klik ikon **Salin** di pojok kanan atas panel output untuk menyalin hasil ke clipboard.
 
-## Custom Domain (opsional)
+### 5. Lihat Detail Proses
 
-Setelah deploy berhasil, kamu bisa tambahkan domain custom (misalnya `.my.id` atau `.vercel.app` custom subdomain) lewat:
-Project Settings → Domains → Add Domain.
+Setelah proses dijalankan, hasil detail muncul dalam dua tab:
 
-## Catatan
+- **🔑 Key Expansion** — menampilkan tabel lengkap ekspansi kunci dari W[0] sampai W[43], termasuk operasi RotWord, SubWord, dan XOR dengan Rcon pada setiap word kelipatan 4.
+- **🔒 Proses Enkripsi / 🔓 Proses Dekripsi** — menampilkan visualisasi round-by-round (Round 0 hingga Round 10) dalam bentuk accordion:
+  - Klik header setiap round untuk membuka/menutup detailnya.
+  - Tombol **Buka Semua** / **Tutup Semua** di atas daftar round untuk expand/collapse semua round sekaligus.
+  - Setiap round menampilkan state matrix 4×4 sebelum dan sesudah tiap operasi (SubBytes, ShiftRows, MixColumns, AddRoundKey) beserta round key yang dipakai.
 
-- Tidak ada backend/API, tidak ada dependency npm yang perlu di-install — murni static HTML.
-- Tidak perlu environment variable apapun.
-- File utama ada di `public/index.html`, jangan dipindah lokasinya karena `vercel.json` merujuk ke path tersebut.
+### 6. Coba Contoh Test Vector (Opsional)
+
+Gunakan tombol berikut untuk mengisi otomatis dengan test vector standar NIST FIPS-197 (berguna untuk verifikasi/pembelajaran):
+
+- **📋 NIST App.B** — mengisi PT `3243f6a8885a308d313198a2e0370734` dan Key `2b7e151628aed2a6abf7158809cf4f3c` (hasil CT yang benar: `3925841d02dc09fbdc118597196a0b32`).
+- **📋 NIST C.1** — mengisi PT `00112233445566778899aabbccddeeff` dan Key `000102030405060708090a0b0c0d0e0f` (hasil CT yang benar: `69c4e0d86a7b0430d8cdb78070b4c55a`).
+
+### 7. Reset
+
+- Klik tombol **↺ Reset** untuk mengosongkan semua input dan menyembunyikan hasil, agar bisa mulai proses baru dari awal.
+
+## Tips
+
+- Gunakan tombol contoh NIST untuk memverifikasi bahwa hasil enkripsi/dekripsi aplikasi sudah sesuai standar resmi sebelum menggunakan input kustom kamu sendiri.
+- Untuk keperluan laporan/tugas, expand semua round (**Buka Semua**) lalu screenshot tiap tahap sebagai bukti proses step-by-step.
+- Pastikan panjang key selalu 32 karakter hex (128-bit) — AES-128 tidak menerima panjang key lain.
