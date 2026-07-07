@@ -1,0 +1,9 @@
+{
+  "name": "aes-128-simulator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AES-128 Simulator - static single-page HTML app",
+  "scripts": {
+    "build": "echo 'No build step required (static HTML)'"
+  }
+}
