@@ -1384,10 +1384,6 @@ function resetAll() {
 
 // ── Example ──
 function fillExample() {
-  // NIST FIPS-197 Appendix B — verified test vector
-  // PT:  3243f6a8885a308d313198a2e0370734
-  // Key: 2b7e151628aed2a6abf7158809cf4f3c
-  // CT:  3925841d02dc09fbdc118597196a0b32
   document.querySelector('input[name=pttype][value=hex]').checked = true;
   onPtTypeChange(document.querySelector('input[name=pttype][value=hex]'));
   document.getElementById('pt-input').value = '3243f6a8885a308d313198a2e0370734';
@@ -1399,10 +1395,6 @@ function fillExample() {
 }
 
 function fillExample2() {
-  // NIST FIPS-197 Appendix C.1
-  // PT:  00112233445566778899aabbccddeeff
-  // Key: 000102030405060708090a0b0c0d0e0f
-  // CT:  69c4e0d86a7b0430d8cdb78070b4c55a  (verified with OpenSSL)
   document.querySelector('input[name=pttype][value=hex]').checked = true;
   onPtTypeChange(document.querySelector('input[name=pttype][value=hex]'));
   document.getElementById('pt-input').value = '00112233445566778899aabbccddeeff';
@@ -1413,7 +1405,6 @@ function fillExample2() {
   showToast('Contoh NIST Appendix C.1 dimuat!');
 }
 
-// Init
 updateCharCount();
 </script>
 </body>
